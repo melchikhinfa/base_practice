@@ -1,3 +1,4 @@
+"""Суперэллипс"""
 import tkinter as tk
 from math import sin, cos, pi
 from numpy import sign
@@ -11,7 +12,7 @@ c = tk.Canvas(root, width=width, height=height, bg='white')
 points_list = []  # список точек для отрисовки
 
 
-def draw_points(canvas, x, y, a, b): # создает точки и записывает их в список
+def draw_points(canvas, x, y, a, b):  # создает точки и записывает их в список
     # Смещение относительно центра, a и b это коорд. центра канваса
     x = a + x
     y = b + y

@@ -1,10 +1,9 @@
 import tkinter as tk
 import math
-from math import pi
 
 width = 600
 height = 600
-bg_colour = 'white'
+bg_color = 'white'
 center_x = width // 2
 center_y = height // 2
 
@@ -12,7 +11,7 @@ oval_radius = 200  # радиус желтого овала
 point_radius = 10  # радиус овала-точки
 dist2point = oval_radius  # расстояние до овала-точки
 angle = 0  # угол
-angle_speed = -0.5  # угловая скорость, она же управляет направлением движения
+angle_speed = -0.01  # угловая скорость, она же управляет направлением движения
 
 
 def point_coords(figure_data):  # вычисляем координаты точки
@@ -30,7 +29,7 @@ def point_coords(figure_data):  # вычисляем координаты точ
 
 def point_move(object, figure_data):
     x1, y1, x2, y2 = point_coords(figure_data)  # вычисляем координаты точки
-    c.coords(object, x1, y1, x2, y2)  # изменяем координаты
+    canvas.coords(object, x1, y1, x2, y2)  # изменяем координаты
 
 
 def point_animation():
@@ -40,16 +39,16 @@ def point_animation():
 
 
 root = tk.Tk()
-c = tk.Canvas(root, width=width, height=height, bg=bg_colour)
-c.pack()
+canvas = tk.Canvas(root, width=width, height=height, bg=bg_color)
+canvas.pack()
 
 oval_coords = [100, 100, 500, 500]  # координаты считаем как center_x - radius = x1 (center_x + radius = x2)
 x1, y1, x2, y2 = oval_coords
-oval = c.create_oval(x1, y1, x2, y2, fill="yellow")
+oval = canvas.create_oval(x1, y1, x2, y2, fill="yellow")
 
 point_data = [center_x, center_y, point_radius, dist2point, angle, angle_speed]  # данные точки
 x1, y1, x2, y2 = point_coords(point_data)
-point = c.create_oval(x1, y1, x2, y2, fill="red")
+point = canvas.create_oval(x1, y1, x2, y2, fill="red")
 
 point_animation()
 root.mainloop()

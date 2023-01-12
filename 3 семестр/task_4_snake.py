@@ -1,12 +1,13 @@
 import tkinter as tk
 import random
+import time
 
 width = 800
 height = 600
 snake_speed = 100
 block_size = 20  # размер блока змеи/еды
 start_size = 3  # стартовое значение блоков змеи
-dir = "Down"  # дефолтное значение направления движения, до получения комманды с клавиатуры
+
 
 
 class Snake:
@@ -15,13 +16,11 @@ class Snake:
     def __init__(self):
         self.snake_size = start_size
         self.coordinates = []
-        self.sn_blocks = []  # тут будем хранить отрисовки блоков змеи
+        self.sn_blocks = []  # тут будем хранить объекты отрисовки блоков змеи
         for i in range(0, self.snake_size):
             self.coordinates.append([400, 300])  # стартоое положение по центру
-
         for x, y in self.coordinates:
-            sn_block = canvas.create_rectangle(x, y, x + block_size, y + block_size, fill='black',
-                                               tag='Snake')  # отрисовываем
+            sn_block = canvas.create_rectangle(x, y, x + block_size, y + block_size, fill='black', tag='Snake')  # отрисовка объектов-блоков
             self.sn_blocks.append(sn_block)
 
 
@@ -35,7 +34,7 @@ class Food:
         canvas.create_rectangle(x, y, x + block_size, y + block_size, fill='red', tag='food')
 
 
-def turn_and_collision(snake, food):
+def turns_and_collision(snake, food):
     """Производит перемещение змейки по 4-м направлениям и фиксирует столкновения"""
     x, y = snake.coordinates[0]
     if dir == "Up":
@@ -65,9 +64,9 @@ def turn_and_collision(snake, food):
         del snake.sn_blocks[-1]  # удаляем блоки из списка блоков тела змеи
 
     # "съедаем" края окна
-    if x <= 0 or x >= width:
+    if x < 0 or x >= width:
         end_game()
-    elif y <= 0 or y >= height:
+    elif y < 0 or y >= height:
         end_game()
 
     # Каннибализм
@@ -75,7 +74,7 @@ def turn_and_collision(snake, food):
         if x == sn_block_coord[0] and y == sn_block_coord[1]:
             end_game()
 
-    root.after(snake_speed, turn_and_collision, snake, food)
+    root.after(snake_speed, turns_and_collision, snake, food)
     canvas.update()
 
 
@@ -98,12 +97,16 @@ def end_game():
     """Выполняет очистку канваса и выводит сообщение об окончании игры"""
     canvas.delete('all')
     canvas.create_text(400, 300, font=('arial', 70), text="Вы проиграли!", fill="red", tag="gameover")
+    canvas.update()
+    time.sleep(2)
+    root.destroy()
 
 
 root = tk.Tk()
 root.title("Змейка")
 root.resizable(0, 0)
 
+dir = "Down"  # дефолтное значение направления движения, до получения комманды с клавиатуры
 # Счет
 score = 0
 score_ind = tk.Label(root, text=f'Счет:{score}', font=('arial', 50))
@@ -121,6 +124,6 @@ root.bind('<Down>', lambda turn: ch_dir('Down'))
 
 snake = Snake()
 food = Food()
-turn_and_collision(snake, food)
+turns_and_collision(snake, food)
 
 root.mainloop()
